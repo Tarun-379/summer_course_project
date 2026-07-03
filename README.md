@@ -1,168 +1,260 @@
 # 🤖 Simple AI Chatbot (Gemini-powered)
 
-A clean, beginner-friendly AI chatbot built with **vanilla HTML/CSS/JS** on the frontend and **Node.js + Express** on the backend. It talks to **Google's Gemini API**, and your API key never touches the browser.
+A clean, beginner-friendly AI chatbot built with **vanilla HTML/CSS/JS** on the frontend and **Node.js + Express** on the backend. It communicates with **Google Gemini** through the official SDK, while keeping your API key securely on the server.
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 project/
 │
-├── server.js          # Express backend — handles /chat requests to Gemini
+├── server.js           # Express backend — handles /chat requests to Gemini
 ├── package.json        # Node dependencies & npm scripts
-├── .env.example         # Template for your environment variables
-├── .gitignore           # Keeps .env and node_modules out of Git
-├── README.md            # You're reading it
+├── .env.example        # Template for environment variables
+├── .gitignore          # Prevents .env and node_modules from being committed
+├── README.md
 └── public/
-    ├── index.html        # Chat UI markup
-    ├── style.css          # Modern, responsive styling
-    └── script.js           # Frontend chat logic (fetch calls, DOM updates)
+    ├── index.html      # Chat UI
+    ├── style.css       # Styling
+    └── script.js       # Frontend logic
 ```
 
 ### What each file does
 
-| File | Purpose |
-|---|---|
-| `server.js` | The only place your Gemini API key is used. Exposes `POST /chat` (send a message, get a reply) and `POST /clear` (reset conversation memory). Also serves the `public/` folder as static files. |
-| `public/index.html` | The skeleton of the chat window: header, message area, typing indicator, input box. |
-| `public/style.css` | All visual styling — chat bubbles, colors, animations, responsive layout. Uses CSS variables so it's easy to re-theme. |
-| `public/script.js` | Runs in the browser. Sends user messages to `/chat` via `fetch`, renders bubbles with timestamps, shows the typing indicator, and handles errors. |
-| `.env` (you create this) | Holds your real `GEMINI_API_KEY`. Never committed to Git. |
+| File                | Purpose                                                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `server.js`         | Runs the Express server, serves the frontend, communicates with the Gemini API, and stores temporary conversation history. |
+| `public/index.html` | Main chat interface.                                                                                                       |
+| `public/style.css`  | Chatbot styling and responsive layout.                                                                                     |
+| `public/script.js`  | Sends messages to the backend and displays AI responses.                                                                   |
+| `.env`              | Stores your `GEMINI_API_KEY` and other environment variables. Never commit this file.                                      |
 
 ---
 
-## 1️⃣ Install Dependencies
+# 1️⃣ Installation
 
-Make sure you have [Node.js](https://nodejs.org/) (v18+) installed. Then, in the project folder:
+Install Node.js (v18 or newer), then run:
 
 ```bash
 npm install
 ```
 
-This installs `express`, `@google/generative-ai`, `dotenv`, and `cors`.
+This installs:
+
+* express
+* @google/generative-ai
+* dotenv
+* cors
 
 ---
 
-## 2️⃣ Add Your API Key
+# 2️⃣ Configure the API Key
 
-1. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
-2. Open `.env` and paste in your real Gemini API key:
-   ```
-   GEMINI_API_KEY=your-real-key-here
-   PORT=3000
-   ```
-3. Get a **free** key from **Google AI Studio**: https://aistudio.google.com/app/apikey
+Create a `.env` file:
 
-⚠️ **Never** commit `.env` to Git — it's already listed in `.gitignore`.
+```env
+GEMINI_API_KEY=your_api_key_here
+PORT=3000
+```
+
+Generate a free API key from Google AI Studio:
+
+https://aistudio.google.com/app/apikey
+
+Never commit your `.env` file.
 
 ---
 
-## 3️⃣ Run the Project
+# 3️⃣ Run the Project
 
-**Standard start:**
+Start the server:
+
 ```bash
 npm start
 ```
 
-**Development mode (auto-restarts on file changes — requires nodemon):**
+or during development:
+
 ```bash
-npm install -g nodemon   # if you don't already have it
 npm run dev
 ```
 
-Then open your browser to:
+Then open:
+
 ```
 http://localhost:3000
 ```
 
-You should see the chat UI. Type a message and press **Enter** (or click the send button) to chat with the AI.
+---
+
+# 4️⃣ Deployment
+
+The project works on any Node.js hosting provider.
+
+### Render
+
+1. Push the project to GitHub.
+2. Create a new Web Service.
+3. Build Command:
+
+```bash
+npm install
+```
+
+4. Start Command:
+
+```bash
+npm start
+```
+
+5. Add the environment variable:
+
+```
+GEMINI_API_KEY=your_api_key
+```
+
+Deploy and you're done.
 
 ---
 
-## 4️⃣ Deploy It
+### Railway
 
-This is a standard Node/Express app, so it works on almost any Node hosting platform. A few common options:
-
-### Option A — Render.com (free tier available)
-1. Push your project to a GitHub repo (`.env` stays out thanks to `.gitignore`).
-2. On Render, create a **New Web Service** → connect your repo.
-3. Build command: `npm install`
-4. Start command: `npm start`
-5. Add an environment variable in Render's dashboard: `GEMINI_API_KEY = your-key`.
-6. Deploy — Render gives you a public URL.
-
-### Option B — Railway.app
-1. Push to GitHub, then "New Project" → "Deploy from GitHub repo" on Railway.
-2. Add `GEMINI_API_KEY` under the project's **Variables** tab.
-3. Railway auto-detects Node and runs `npm start`.
-
-### Option C — A VPS (e.g., DigitalOcean, AWS EC2)
-1. Install Node.js on the server.
-2. Clone your repo, run `npm install --production`.
-3. Create a `.env` file directly on the server (never upload it via Git).
-4. Run the app with a process manager so it stays alive:
-   ```bash
-   npm install -g pm2
-   pm2 start server.js --name chatbot
-   ```
-5. Put it behind Nginx (reverse proxy) for HTTPS with a real domain.
-
-**In all cases:** the API key is set as a server-side environment variable — never hard-code it into any file you deploy.
+Deploy directly from GitHub and add the same environment variable under **Variables**.
 
 ---
 
-## 5️⃣ Customize the Chatbot
+### VPS
 
-- **Change the AI's personality** — edit the `systemInstruction` in `server.js`:
-  ```js
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    systemInstruction: 'You are a friendly, helpful assistant...',
-  });
-  ```
-  Make it a coding tutor, a customer support bot, a study buddy — just change the text.
+```bash
+npm install --production
+npm install -g pm2
+pm2 start server.js --name chatbot
+```
 
-- **Switch the model** — in `server.js`, change:
-  ```js
-  model: 'gemini-1.5-flash',
-  ```
-  to `'gemini-1.5-pro'` for higher-quality (but slower/pricier) responses, or a newer Gemini model if your account has access.
+Use Nginx as a reverse proxy if deploying publicly.
 
-- **Re-theme the colors** — all colors live as CSS variables at the top of `style.css`:
-  ```css
-  :root {
-    --color-primary: #4f46e5;   /* change this for a different accent color */
+---
+
+# 5️⃣ Customization
+
+## Change the chatbot personality
+
+Edit the `systemInstruction` inside `server.js`.
+
+```js
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+  systemInstruction:
+    "You are a friendly, helpful assistant. Keep answers concise and clear.",
+});
+```
+
+---
+
+## Change the Gemini model
+
+Replace
+
+```js
+model: "gemini-2.5-flash"
+```
+
+with another supported Gemini model if desired.
+
+Examples include:
+
+* `gemini-2.5-flash`
+* `gemini-2.5-flash-lite`
+* `gemini-2.0-flash`
+
+Check Google's documentation for the latest supported models.
+
+---
+
+## Adjust creativity
+
+```js
+generationConfig: {
+  temperature: 0.7,
+  maxOutputTokens: 500,
+}
+```
+
+* Higher temperature → more creative.
+* Lower temperature → more deterministic.
+* Increase `maxOutputTokens` for longer responses.
+
+---
+
+## Change the theme
+
+Modify the CSS variables near the top of `style.css`.
+
+```css
+:root {
+    --color-primary: #4f46e5;
     --color-bg: #eef1f7;
-  }
-  ```
-
-- **Adjust reply length/creativity** — in `server.js`, tweak the `generationConfig`:
-  ```js
-  generationConfig: {
-    temperature: 0.7,      // higher = more creative/random, lower = more focused
-    maxOutputTokens: 500,  // maximum length of each AI reply
-  }
-  ```
-
-- **Persist chat history across restarts** — currently, conversation history lives in memory (`conversationHistory` array in `server.js`) and resets when the server restarts. To make it permanent, swap that array for a database (e.g. SQLite, MongoDB, Redis) keyed by user/session ID.
-
-- **Add multi-user support** — right now, everyone hitting the server shares one `conversationHistory`. For a real multi-user product, store history per session (e.g. using `express-session` + a database) instead of a single global array.
+}
+```
 
 ---
 
-## 🛠️ Troubleshooting
+## Persistent chat history
 
-| Problem | Fix |
-|---|---|
-| `❌ ERROR: GEMINI_API_KEY is missing` on startup | You forgot to create `.env`. Run `cp .env.example .env` and add your key. |
-| `500` "invalid API key" errors when chatting | Your API key is invalid, disabled, or mistyped — generate a new one at [Google AI Studio](https://aistudio.google.com/app/apikey). |
-| `429` errors when chatting | You've hit Gemini's rate limit or free-tier quota — wait a bit or check your quota in Google AI Studio. |
-| Blank page at `localhost:3000` | Make sure `npm start` is actually running and check the terminal for errors. |
+Currently the chatbot stores conversations only in memory.
+
+To persist conversations after restarting the server, integrate a database such as:
+
+* SQLite
+* MongoDB
+* PostgreSQL
+* Redis
 
 ---
 
-Built as a minimal, hackable starting point — feel free to rip it apart and make it your own. 🚀
+## Multi-user support
+
+Currently all users share the same conversation history.
+
+For production applications, store history per user or session using:
+
+* express-session
+* JWT authentication
+* Database-backed sessions
+
+---
+
+# 🛠️ Troubleshooting
+
+| Problem                                    | Solution                                                                                                                                                       |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GEMINI_API_KEY is missing`                | Create a `.env` file and add your API key.                                                                                                                     |
+| `EADDRINUSE: address already in use :3000` | Another application is already using port 3000. Kill the existing process or change the port.                                                                  |
+| `404 model not found`                      | You're using an outdated Gemini model name. Update to a currently supported model such as `gemini-2.5-flash` and ensure `@google/generative-ai` is up to date. |
+| `429 Too Many Requests`                    | You've exceeded your API quota or rate limit. Wait and try again later.                                                                                        |
+| Invalid API key                            | Verify the API key in `.env` and restart the server.                                                                                                           |
+| Blank page                                 | Ensure the server is running and that the `public` folder is being served correctly.                                                                           |
+
+---
+
+# 📦 Tech Stack
+
+* HTML5
+* CSS3
+* Vanilla JavaScript
+* Node.js
+* Express.js
+* Google Gemini API
+* dotenv
+* CORS
+
+---
+
+## License
+
+This project is provided as a simple educational starter template. Feel free to modify, extend, and use it in your own projects.
+
+---
+
+Built with ❤️ using Node.js, Express, and Google Gemini.
