@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chatbot</title>
+
+  <!-- Link to our stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Simple emoji favicon, no extra file needed -->
+  <link
+    rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>"
+  />
+</head>
+<body>
+  <div class="chat-app">
+    <!-- ===== Header ===== -->
+    <header class="chat-header">
+      <div class="header-info">
+        <span class="bot-avatar">🤖</span>
+        <div>
+          <h1>AI Chatbot</h1>
+          <p class="status">
+            <span class="status-dot"></span> Online
+          </p>
+        </div>
+      </div>
+      <button id="clearChatBtn" class="clear-btn" title="Clear chat">
+        🗑️ Clear
+      </button>
+    </header>
+
+    <!-- ===== Chat messages area ===== -->
+    <main id="chatWindow" class="chat-window">
+      <!-- Messages are inserted here dynamically by script.js -->
+      <div class="welcome-message">
+        <p>👋 Hi! I'm your AI assistant. Ask me anything to get started.</p>
+      </div>
+    </main>
+
+    <!-- ===== Typing indicator (hidden by default) ===== -->
+    <div id="typingIndicator" class="typing-indicator hidden">
+      <span class="bot-avatar small">🤖</span>
+      <div class="typing-bubble">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <!-- ===== Input area ===== -->
+    <footer class="chat-input-area">
+      <textarea
+        id="userInput"
+        placeholder="Type a message..."
+        rows="1"
+        maxlength="1000"
+      ></textarea>
+      <button id="sendBtn" class="send-btn" title="Send message">
+        <span id="sendIcon">➤</span>
+      </button>
+    </footer>
+  </div>
+
+  <!-- Our frontend logic -->
+  <script src="script.js"></script>
+</body>
+</html>
